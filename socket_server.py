@@ -9,9 +9,10 @@ clients = set()
 
 # Health check endpoint for load balancers or monitoring tools
 async def health_check(connection, request):
-    upgrade_header = request.headers.get("Upgrade", "")
-    if "upgrade" not in upgrade_header.lower():
-        return (200, [], b"OK\n")
+    if "upgrade" not in request.headers.get("Upgrade", "").lower():
+        # répond 200 OK à n'importe quelle requête HTTP (GET, HEAD, etc.)
+        # empêche de couper la connexion
+        return (200, [("Content-Type", "text/plain")], b"OK\n")
     return None
 
 # WebSocket handler to manage client connections and broadcast messages
