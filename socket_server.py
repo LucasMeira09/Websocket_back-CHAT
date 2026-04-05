@@ -12,7 +12,7 @@ clients = set()
 async def health_check(connection, request):
     if request.header.get("Upgrade", "").lower() != "websocket":
         headers = Headers[("Content-Type", "text/plain"), ("Content-Length", "2"), ("Connection", "close")]
-        return Response(200, headers, b"OK")
+        return Response(200, "OK", headers, b"OK")
     return None
 
 # WebSocket handler to manage client connections and broadcast messages
