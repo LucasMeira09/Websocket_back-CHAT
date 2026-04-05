@@ -1,6 +1,7 @@
 import asyncio
 from websockets.asyncio.server import serve
 from websockets.exceptions import ConnectionClosedOK
+from websockets.http11 import Response, Headers
 import json
 import os
 
@@ -9,10 +10,9 @@ clients = set()
 
 # Health check endpoint for load balancers or monitoring tools
 async def health_check(connection, request):
-    if "upgrade" not in request.headers.get("Upgrade", "").lower():
-        # répond 200 OK à n'importe quelle requête HTTP (GET, HEAD, etc.)
-        # empêche de couper la connexion
-        return (200, b"OK\n")
+    if request.header.get("Upgrade", "").lower() != "websocket":
+        headers = Headers[("Content-Type", "text/plain"), ("Content-Length", "2"), ("Connection", "close")]
+        return Response(200, headers, b"OK")
     return None
 
 # WebSocket handler to manage client connections and broadcast messages
