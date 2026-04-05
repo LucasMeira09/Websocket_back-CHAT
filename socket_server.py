@@ -4,9 +4,12 @@ from websockets.exceptions import ConnectionClosedOK
 from websockets.http11 import Response, Headers
 import json
 import os
+import logging
 
 # Set to store connected clients
 clients = set()
+
+logging.getLogger("websockets.server").setLevel(logging.CRITICAL)
 
 # Health check endpoint for load balancers or monitoring tools
 async def health_check(connection, request):
