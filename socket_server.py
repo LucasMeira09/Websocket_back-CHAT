@@ -12,7 +12,7 @@ async def health_check(connection, request):
     if "upgrade" not in request.headers.get("Upgrade", "").lower():
         # répond 200 OK à n'importe quelle requête HTTP (GET, HEAD, etc.)
         # empêche de couper la connexion
-        return (200, [("Content-Type", "text/plain")], b"OK\n")
+        return (200, [("Content-Type", "text/plain"), ("Connection", "close")], b"OK\n")
     return None
 
 # WebSocket handler to manage client connections and broadcast messages
